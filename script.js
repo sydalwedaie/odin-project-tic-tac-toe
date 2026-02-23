@@ -28,13 +28,45 @@ function Cell() {
   return { setValue, getValue };
 }
 
+// State function factory
+function GameState() {
+  let currentView = "menu";
+  let playerOneScore = 0;
+  let playerTwoScore = 0;
+  let tieCount = 0;
+
+  const getView = () => currentView;
+  const getPlayerOneScore = () => playerOneScore;
+  const getPlayerTwoScore = () => playerTwoScore;
+  const getTieCount = () => tieCount;
+
+  const setView = (view) => (currentView = view);
+  const incPlayerOneScore = () => playerOneScore++;
+  const incPlayerTwoScore = () => playerTwoScore++;
+  const incTieCount = () => tieCount++;
+
+  return {
+    getView,
+    getPlayerOneScore,
+    getPlayerTwoScore,
+    getTieCount,
+    setView,
+    incPlayerOneScore,
+    incPlayerTwoScore,
+    incTieCount,
+  };
+}
+
 // Game controller with players object
-function GameController(playerXName = "Player X", playerOName = "Player O") {
+function GameController(
+  playerOneName = "Player X",
+  playerTwoName = "Player O"
+) {
   const board = Gameboard();
 
   const players = [
-    { name: playerXName, token: "X" },
-    { name: playerOName, token: "O" },
+    { name: playerOneName, token: "X" },
+    { name: playerTwoName, token: "O" },
   ];
 
   let activePlayer = players[0];
@@ -43,7 +75,7 @@ function GameController(playerXName = "Player X", playerOName = "Player O") {
   const switchPlayer = () =>
     (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
 
-  const printNewRound = () => {
+  const printNewTurn = () => {
     console.log(`It's ${getActivePlayer().name}'s turn...'`);
     console.log(printTableInConsole(board.getValues()));
   };
@@ -66,7 +98,7 @@ function GameController(playerXName = "Player X", playerOName = "Player O") {
     });
   };
 
-  const playRound = (cellIndex) => {
+  const playTurn = (cellIndex) => {
     // Don't play a taken cell
     if (board.getValues()[cellIndex] !== null) return;
 
@@ -76,27 +108,65 @@ function GameController(playerXName = "Player X", playerOName = "Player O") {
     // Check win condition
     if (checkWin(getActivePlayer().token)) {
       console.log(`${getActivePlayer().name} wins!`);
+      return;
     } else {
       switchPlayer();
-      printNewRound();
+      printNewTurn();
     }
   };
 
-  printNewRound();
+  printNewTurn();
 
-  return { board: board.getBoard, getActivePlayer, playRound };
+  return { getBoard: board.getBoard, getActivePlayer, playTurn };
 }
 
 // Utils
 function printTableInConsole(board) {
-  const modBoard = board.map((cell) => (cell ? cell : " "));
+  // Change null values to an empty space
+  const modBoard = board.map((cell) => cell || " ");
+
   const row1 = "| " + modBoard.slice(0, 3).join(" | ") + " |\n";
   const row2 = "| " + modBoard.slice(3, 6).join(" | ") + " |\n";
   const row3 = "| " + modBoard.slice(6).join(" | ") + " |\n";
+
   const border = "|-" + "---".split("").join("-+-") + "-|\n";
 
   return row1 + border + row2 + border + row3;
 }
 
+// View
+function displayController() {
+  const $ = (selector) => document.querySelector(selector);
+  const activePlayerEl = $(".active-player");
+  const boardEl = $(".board");
+  const game = GameController();
+
+  function updateScreen() {
+    const board = game.getBoard();
+
+    boardEl.textContent = "";
+    activePlayerEl.textContent = `It's ${game.getActivePlayer().name}'s turn...`;
+
+    board.forEach((cell, index) => {
+      const tableCell = document.createElement("button");
+      tableCell.classList.add("cell");
+      tableCell.dataset.cell = index;
+      tableCell.textContent = cell.getValue();
+      boardEl.appendChild(tableCell);
+    });
+  }
+
+  function boardClickHandler(e) {
+    if (!e.target.dataset.cell) return;
+    game.playTurn(e.target.dataset.cell);
+    updateScreen();
+  }
+
+  boardEl.addEventListener("click", boardClickHandler);
+
+  updateScreen();
+}
+
 // Calls
 const game = GameController();
+displayController();

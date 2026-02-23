@@ -7,7 +7,38 @@
     <title>Odin Project | Tic Tac Toe</title>
   </head>
   <body>
-    <p>hello</p>
+    <main>
+      <header class="board-header">
+        <div class="logo">XO</div>
+        <div class="active-player"></div>
+        <button class="reset">RST</button>
+      </header>
+      <section class="board"></section>
+      <footer class="stats">
+        <div class="score-p1">
+          X <span>(P1)</span>
+          <div class="count"></div>
+        </div>
+        <div class="score-ties">
+          TIES
+          <div class="count"></div>
+        </div>
+        <div class="score-p2">
+          O <span>(P2)</span>
+          <div class="count"></div>
+        </div>
+      </footer>
+      <dialog class="modal">
+        <p class="msg-winner">winner</p>
+        <p class="msg-round">round result</p>
+        <div class="modal-buttons">buttons</div>
+      </dialog>
+    </main>
+    <footer>
+      <p>
+        Coded by <a href="https://github.com/sydalwedaie">Sayed Ali Alwedaie</a>
+      </p>
+    </footer>
     <script src="script.js"></script>
   </body>
 </html>

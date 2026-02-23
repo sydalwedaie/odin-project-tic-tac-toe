@@ -12,3 +12,25 @@ p {
   margin: 0;
   padding: 0;
 }
+
+.board {
+  display: grid;
+  height: 300px;
+  width: 300px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 5px;
+  padding: 2px;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2rem;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background: lightyellow;
+  cursor: pointer;
+}
