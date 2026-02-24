@@ -7,34 +7,71 @@
     <title>Odin Project | Tic Tac Toe</title>
   </head>
   <body>
-    <main>
+    <section class="setup-view">
+      <div class="logo">XO</div>
+      <form>
+        <label>
+          <img src="/assets/icon-x.svg" alt="icon x" />
+          <input type="text" id="player-x-name" placeholder="Player X" />
+        </label>
+        <label>
+          <img src="/assets/icon-o.svg" alt="icon x" />
+          <input type="text" id="player-o-name" placeholder="Player O" />
+        </label>
+      </form>
+      <button class="new-game">NEW GAME</button>
+    </section>
+    <main class="game-view" hidden>
       <header class="board-header">
         <div class="logo">XO</div>
         <div class="active-player"></div>
-        <button class="reset">RST</button>
+        <button class="restart">RST</button>
       </header>
       <section class="board"></section>
       <footer class="stats">
         <div class="score-p1">
-          X <span>(P1)</span>
-          <div class="count"></div>
+          X (<span class="name-p1">P1</span>)
+          <div class="count">0</div>
         </div>
         <div class="score-ties">
           TIES
-          <div class="count"></div>
+          <div class="count">0</div>
         </div>
         <div class="score-p2">
-          O <span>(P2)</span>
-          <div class="count"></div>
+          O (<span class="name-p2">P2</span>)
+          <div class="count">0</div>
         </div>
       </footer>
-      <dialog class="modal">
-        <p class="msg-winner">winner</p>
+      <dialog class="round-modal">
+        <p class="msg-winner"></p>
         <p class="msg-round">round result</p>
-        <div class="modal-buttons">buttons</div>
+        <div class="modal-buttons">
+          <button class="negative">QUIT</button>
+          <button class="affirm">NEXT ROUND</button>
+        </div>
+      </dialog>
+      <dialog class="restart-modal" id="restart-modal">
+        <p>RESTART GAME?</p>
+        <div class="modal-buttons">
+          <button class="negative" commandfor="restart-modal" command="close">
+            NO, CANCEL
+          </button>
+          <button class="affirm">YES, RESTART</button>
+        </div>
       </dialog>
     </main>
     <footer>
+      <p>
+        Project by
+        <a
+          href="https://www.theodinproject.com/lessons/node-path-javascript-tic-tac-toe"
+          >The Odin Project</a
+        >. Design by
+        <a
+          href="https://www.frontendmentor.io/challenges/tic-tac-toe-game-Re7ZF_E2v"
+          >Frontend Mentor</a
+        >.
+      </p>
       <p>
         Coded by <a href="https://github.com/sydalwedaie">Sayed Ali Alwedaie</a>
       </p>

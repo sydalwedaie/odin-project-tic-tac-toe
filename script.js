@@ -30,27 +30,37 @@ function Cell() {
 
 // State function factory
 function GameState() {
-  let currentView = "menu";
+  let currentView = "active"; // menu, active, win, tie, restart
+  let playerOneName = "Player X";
+  let playerTwoName = "Player O";
   let playerOneScore = 0;
   let playerTwoScore = 0;
   let tieCount = 0;
 
   const getView = () => currentView;
+  const getPlayerOneName = () => playerOneName;
+  const getPlayerTwoName = () => playerTwoName;
   const getPlayerOneScore = () => playerOneScore;
   const getPlayerTwoScore = () => playerTwoScore;
   const getTieCount = () => tieCount;
 
   const setView = (view) => (currentView = view);
+  const setPlayerOneName = (name) => (playerOneName = name);
+  const setPlayerTwoName = (name) => (playerTwoName = name);
   const incPlayerOneScore = () => playerOneScore++;
   const incPlayerTwoScore = () => playerTwoScore++;
   const incTieCount = () => tieCount++;
 
   return {
     getView,
+    getPlayerOneName,
+    getPlayerTwoName,
     getPlayerOneScore,
     getPlayerTwoScore,
     getTieCount,
     setView,
+    setPlayerOneName,
+    setPlayerTwoName,
     incPlayerOneScore,
     incPlayerTwoScore,
     incTieCount,
@@ -58,15 +68,12 @@ function GameState() {
 }
 
 // Game controller with players object
-function GameController(
-  playerOneName = "Player X",
-  playerTwoName = "Player O"
-) {
+function GameController(gameState) {
   const board = Gameboard();
 
   const players = [
-    { name: playerOneName, token: "X" },
-    { name: playerTwoName, token: "O" },
+    { name: gameState.getPlayerOneName(), token: "X" },
+    { name: gameState.getPlayerTwoName(), token: "O" },
   ];
 
   let activePlayer = players[0];
@@ -108,7 +115,16 @@ function GameController(
     // Check win condition
     if (checkWin(getActivePlayer().token)) {
       console.log(`${getActivePlayer().name} wins!`);
-      return;
+      if (players.indexOf(getActivePlayer()) === 0) {
+        gameState.incPlayerOneScore();
+      } else {
+        gameState.incPlayerTwoScore();
+      }
+      gameState.setView("win");
+    } else if (board.getValues().every((cell) => cell !== null)) {
+      console.log("It's a tie!");
+      gameState.incTieCount();
+      gameState.setView("tie");
     } else {
       switchPlayer();
       printNewTurn();
@@ -135,11 +151,24 @@ function printTableInConsole(board) {
 }
 
 // View
-function displayController() {
+function displayController(game, gameState) {
   const $ = (selector) => document.querySelector(selector);
+
   const activePlayerEl = $(".active-player");
   const boardEl = $(".board");
-  const game = GameController();
+  const nameP1El = $(".stats .name-p1");
+  const nameP2El = $(".stats .name-p2");
+  const scoreP1El = $(".score-p1 .count");
+  const scoreP2El = $(".score-p2 .count");
+  const scoreTiesEl = $(".score-ties .count");
+
+  const roundModalEl = $(".round-modal");
+  const msgWinnerEl = $(".msg-winner");
+  const msgRoundEl = $(".msg-round");
+  const nextRoundBtn = $(".round-modal .affirm");
+
+  const restartModalEl = $(".restart-modal");
+  const restartModalBtn = $(".restart");
 
   function updateScreen() {
     const board = game.getBoard();
@@ -154,19 +183,82 @@ function displayController() {
       tableCell.textContent = cell.getValue();
       boardEl.appendChild(tableCell);
     });
+
+    nameP1El.textContent = gameState.getPlayerOneName();
+    nameP2El.textContent = gameState.getPlayerTwoName();
+    scoreP1El.textContent = gameState.getPlayerOneScore();
+    scoreP2El.textContent = gameState.getPlayerTwoScore();
+    scoreTiesEl.textContent = gameState.getTieCount();
   }
 
   function boardClickHandler(e) {
     if (!e.target.dataset.cell) return;
     game.playTurn(e.target.dataset.cell);
     updateScreen();
+    if (gameState.getView() === "win") {
+      roundModalEl.showModal();
+      msgWinnerEl.textContent = `${game.getActivePlayer().name} WINS!`;
+      msgRoundEl.textContent = `${game.getActivePlayer().token} TAKES THE ROUND`;
+    } else if (gameState.getView() === "tie") {
+      roundModalEl.showModal();
+      msgWinnerEl.style.display = "none";
+      msgRoundEl.textContent = "ROUND TIED";
+      msgRoundEl.classList.add("round-tied");
+    }
+  }
+
+  function nextRoundClickHandler() {
+    roundModalEl.close();
+    gameState.setView("active");
+    game = GameController(gameState);
+    updateScreen();
   }
 
   boardEl.addEventListener("click", boardClickHandler);
+  nextRoundBtn.addEventListener("click", nextRoundClickHandler);
+  restartModalBtn.addEventListener("click", () => restartModalEl.showModal());
 
   updateScreen();
 }
 
 // Calls
-const game = GameController();
-displayController();
+
+function switchView() {
+  const $ = (selector) => document.querySelector(selector);
+  const setupViewEl = $(".setup-view");
+  const gameViewEl = $(".game-view");
+
+  setupViewEl.toggleAttribute("hidden");
+  gameViewEl.toggleAttribute("hidden");
+}
+
+function newGame() {
+  const $ = (selector) => document.querySelector(selector);
+  const playerXNameInput = $("#player-x-name");
+  const playerONameInput = $("#player-o-name");
+
+  let gameState = GameState();
+  gameState.setPlayerOneName(playerXNameInput.value || "Player X");
+  gameState.setPlayerTwoName(playerONameInput.value || "Player Y");
+
+  let game = GameController(gameState);
+
+  switchView();
+  displayController(game, gameState);
+}
+
+function restartGame() {
+  const $ = (selector) => document.querySelector(selector);
+  const restartModalEl = $(".restart-modal");
+  restartModalEl.close();
+  switchView();
+}
+
+function start() {
+  const newGameBtn = document.querySelector(".new-game");
+  const restartBtn = document.querySelector(".restart-modal .affirm");
+  restartBtn.addEventListener("click", restartGame);
+  newGameBtn.addEventListener("click", newGame);
+}
+
+start();
