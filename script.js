@@ -38,8 +38,8 @@ function GameState() {
   let tieCount = 0;
 
   const getView = () => currentView;
-  const getPlayerOneName = () => playerOneName;
-  const getPlayerTwoName = () => playerTwoName;
+  const getPlayerOneName = () => playerOneName.toUpperCase();
+  const getPlayerTwoName = () => playerTwoName.toUpperCase();
   const getPlayerOneScore = () => playerOneScore;
   const getPlayerTwoScore = () => playerTwoScore;
   const getTieCount = () => tieCount;
@@ -166,21 +166,27 @@ function displayController(game, gameState) {
   const msgWinnerEl = $(".msg-winner");
   const msgRoundEl = $(".msg-round");
   const nextRoundBtn = $(".round-modal .affirm");
+  const quitBtn = $(".round-modal .negative");
 
   const restartModalEl = $(".restart-modal");
   const restartModalBtn = $(".restart");
+
+  const getPlayerIcon = (token) => {
+    if (!token) return "";
+    return `<img src="/assets/icon-${token.toLowerCase()}.svg">`;
+  };
 
   function updateScreen() {
     const board = game.getBoard();
 
     boardEl.textContent = "";
-    activePlayerEl.textContent = `It's ${game.getActivePlayer().name}'s turn...`;
+    activePlayerEl.innerHTML = `${getPlayerIcon(game.getActivePlayer().token)} TURN`;
 
     board.forEach((cell, index) => {
       const tableCell = document.createElement("button");
       tableCell.classList.add("cell");
       tableCell.dataset.cell = index;
-      tableCell.textContent = cell.getValue();
+      tableCell.innerHTML = getPlayerIcon(cell.getValue());
       boardEl.appendChild(tableCell);
     });
 
@@ -198,7 +204,7 @@ function displayController(game, gameState) {
     if (gameState.getView() === "win") {
       roundModalEl.showModal();
       msgWinnerEl.textContent = `${game.getActivePlayer().name} WINS!`;
-      msgRoundEl.textContent = `${game.getActivePlayer().token} TAKES THE ROUND`;
+      msgRoundEl.innerHTML = `${getPlayerIcon(game.getActivePlayer().token)} TAKES THE ROUND`;
     } else if (gameState.getView() === "tie") {
       roundModalEl.showModal();
       msgWinnerEl.style.display = "none";
@@ -214,14 +220,18 @@ function displayController(game, gameState) {
     updateScreen();
   }
 
+  function quitBtnHandler() {
+    roundModalEl.close();
+    boardEl.removeEventListener("click", boardClickHandler);
+  }
+
   boardEl.addEventListener("click", boardClickHandler);
   nextRoundBtn.addEventListener("click", nextRoundClickHandler);
   restartModalBtn.addEventListener("click", () => restartModalEl.showModal());
+  quitBtn.addEventListener("click", quitBtnHandler);
 
   updateScreen();
 }
-
-// Calls
 
 function switchView() {
   const $ = (selector) => document.querySelector(selector);
@@ -239,7 +249,7 @@ function newGame() {
 
   let gameState = GameState();
   gameState.setPlayerOneName(playerXNameInput.value || "Player X");
-  gameState.setPlayerTwoName(playerONameInput.value || "Player Y");
+  gameState.setPlayerTwoName(playerONameInput.value || "Player O");
 
   let game = GameController(gameState);
 
