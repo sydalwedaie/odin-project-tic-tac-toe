@@ -13,14 +13,18 @@
           <img src="assets/logo.svg" alt="XO Logo" />
         </header>
         <form>
-          <label>
-            <img src="/assets/icon-x.svg" alt="icon x" />
-            <input type="text" id="player-x-name" placeholder="Player X" />
-          </label>
-          <label>
-            <img src="/assets/icon-o.svg" alt="icon x" />
-            <input type="text" id="player-o-name" placeholder="Player O" />
-          </label>
+          <p>ENTER PLAYERS NAME</p>
+          <div class="player-name-inputs">
+            <label>
+              <img src="/assets/icon-x.svg" alt="icon x" />
+              <input type="text" id="player-x-name" placeholder="Player X" />
+            </label>
+            <label>
+              <img src="/assets/icon-o.svg" alt="icon x" />
+              <input type="text" id="player-o-name" placeholder="Player O" />
+            </label>
+          </div>
+          <p>REMEMBER: X GOES FIRST</p>
         </form>
         <button class="new-game-btn">NEW GAME</button>
       </section>
@@ -49,28 +53,36 @@
         </footer>
 
         <dialog class="round-modal" id="round-modal">
-          <p class="round-winner"></p>
-          <p class="round-result">round result</p>
-          <div class="modal-buttons">
-            <button class="negative" commandfor="round-modal" command="close">
-              QUIT
-            </button>
-            <button class="affirm">NEXT ROUND</button>
+          <div>
+            <p class="round-winner secondary"></p>
+            <p class="round-result primary">round result</p>
+            <div class="modal-buttons">
+              <button class="negative" commandfor="round-modal" command="close">
+                QUIT
+              </button>
+              <button class="affirm">NEXT ROUND</button>
+            </div>
           </div>
         </dialog>
 
         <dialog class="restart-modal" id="restart-modal">
-          <p>RESTART GAME?</p>
-          <div class="modal-buttons">
-            <button class="negative" commandfor="restart-modal" command="close">
-              NO, CANCEL
-            </button>
-            <button class="affirm">YES, RESTART</button>
+          <div>
+            <p class="primary">RESTART GAME?</p>
+            <div class="modal-buttons">
+              <button
+                class="negative"
+                commandfor="restart-modal"
+                command="close"
+              >
+                NO, CANCEL
+              </button>
+              <button class="affirm">YES, RESTART</button>
+            </div>
           </div>
         </dialog>
       </section>
     </main>
-    <footer>
+    <footer class="attribution">
       <p>
         Project by
         <a
