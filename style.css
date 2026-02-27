@@ -189,6 +189,7 @@ main {
     background-color: var(--color-grey-500);
     border: none;
     box-shadow: 0 5px var(--color-grey-700);
+    cursor: pointer;
   }
 
   .board {
@@ -292,6 +293,7 @@ dialog {
       border-radius: 0.5rem;
       color: var(--color-navy-900);
       font-weight: bold;
+      cursor: pointer;
     }
 
     .negative {

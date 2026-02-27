@@ -249,10 +249,14 @@ function GameView() {
     }
   }
 
+  function hideRoundModal(state) {
+    roundModalResultEl.classList.remove(`${state.activePlayer.token}-win`);
+    roundModalEl.close();
+  }
+
   function bindNextRoundClick(handleNextRound) {
     roundModalNextRoundBtn.addEventListener("click", () => {
       handleNextRound();
-      roundModalEl.close();
     });
   }
 
@@ -277,6 +281,7 @@ function GameView() {
     switchViews,
     bindBoardClick,
     showRoundModal,
+    hideRoundModal,
     bindNextRoundClick,
     bindRestartClick,
     bindRestartModalRestartBtnClick,
@@ -305,6 +310,7 @@ function AppController() {
   });
 
   view.bindNextRoundClick(() => {
+    view.hideRoundModal(state); /* must be first */
     game.nextRound();
     state = game.getGameState();
     view.renderBoard(state);
