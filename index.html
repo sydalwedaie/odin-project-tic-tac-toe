@@ -7,60 +7,68 @@
     <title>Odin Project | Tic Tac Toe</title>
   </head>
   <body>
-    <section class="setup-view">
-      <div class="logo"><img src="assets/logo.svg" alt="XO Logo" /></div>
-      <form>
-        <label>
-          <img src="/assets/icon-x.svg" alt="icon x" />
-          <input type="text" id="player-x-name" placeholder="Player X" />
-        </label>
-        <label>
-          <img src="/assets/icon-o.svg" alt="icon x" />
-          <input type="text" id="player-o-name" placeholder="Player O" />
-        </label>
-      </form>
-      <button class="new-game">NEW GAME</button>
-    </section>
-    <main class="game-view" hidden>
-      <header class="board-header">
-        <div class="logo"><img src="assets/logo.svg" alt="XO Logo" /></div>
-        <div class="active-player"></div>
-        <button class="restart">
-          <img src="assets/icon-restart.svg" alt="" />
-        </button>
-      </header>
-      <section class="board"></section>
-      <footer class="stats">
-        <div class="score-p1">
-          X (<span class="name-p1">P1</span>)
-          <div class="count">0</div>
-        </div>
-        <div class="score-ties">
-          TIES
-          <div class="count">0</div>
-        </div>
-        <div class="score-p2">
-          O (<span class="name-p2">P2</span>)
-          <div class="count">0</div>
-        </div>
-      </footer>
-      <dialog class="round-modal">
-        <p class="msg-winner"></p>
-        <p class="msg-round">round result</p>
-        <div class="modal-buttons">
-          <button class="negative">QUIT</button>
-          <button class="affirm">NEXT ROUND</button>
-        </div>
-      </dialog>
-      <dialog class="restart-modal" id="restart-modal">
-        <p>RESTART GAME?</p>
-        <div class="modal-buttons">
-          <button class="negative" commandfor="restart-modal" command="close">
-            NO, CANCEL
+    <main>
+      <section class="setup-view">
+        <header class="logo">
+          <img src="assets/logo.svg" alt="XO Logo" />
+        </header>
+        <form>
+          <label>
+            <img src="/assets/icon-x.svg" alt="icon x" />
+            <input type="text" id="player-x-name" placeholder="Player X" />
+          </label>
+          <label>
+            <img src="/assets/icon-o.svg" alt="icon x" />
+            <input type="text" id="player-o-name" placeholder="Player O" />
+          </label>
+        </form>
+        <button class="new-game-btn">NEW GAME</button>
+      </section>
+      <section class="game-view" hidden>
+        <header class="board-header">
+          <div class="logo"><img src="assets/logo.svg" alt="XO Logo" /></div>
+          <div class="active-player"></div>
+          <button class="restart-btn">
+            <img src="assets/icon-restart.svg" alt="" />
           </button>
-          <button class="affirm">YES, RESTART</button>
-        </div>
-      </dialog>
+        </header>
+        <section class="board"></section>
+        <footer class="stats">
+          <div class="score-p1">
+            X (<span class="name-p1">P1</span>)
+            <div class="count">0</div>
+          </div>
+          <div class="score-ties">
+            TIES
+            <div class="count">0</div>
+          </div>
+          <div class="score-p2">
+            O (<span class="name-p2">P2</span>)
+            <div class="count">0</div>
+          </div>
+        </footer>
+
+        <dialog class="round-modal" id="round-modal">
+          <p class="round-winner"></p>
+          <p class="round-result">round result</p>
+          <div class="modal-buttons">
+            <button class="negative" commandfor="round-modal" command="close">
+              QUIT
+            </button>
+            <button class="affirm">NEXT ROUND</button>
+          </div>
+        </dialog>
+
+        <dialog class="restart-modal" id="restart-modal">
+          <p>RESTART GAME?</p>
+          <div class="modal-buttons">
+            <button class="negative" commandfor="restart-modal" command="close">
+              NO, CANCEL
+            </button>
+            <button class="affirm">YES, RESTART</button>
+          </div>
+        </dialog>
+      </section>
     </main>
     <footer>
       <p>
