@@ -61,6 +61,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 0.5rem;
 }
 
 main {
@@ -95,7 +96,12 @@ main {
 
   .player-name-inputs {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
+
+    @media (min-width: 35rem) {
+      flex-direction: row;
+    }
   }
 
   label {
@@ -194,12 +200,13 @@ main {
 
   .board {
     display: grid;
-    height: 460px;
-    width: 460px;
+    max-height: 460px;
+    max-width: 460px;
+    width: 95vw;
+    height: 95vw;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 1.25rem;
-    padding: 2px;
   }
 
   .cell {
@@ -263,11 +270,15 @@ dialog {
   }
 
   .primary {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     font-weight: bold;
     display: flex;
     align-items: center;
     gap: 1.5rem;
+
+    @media (min-width: 35rem) {
+      font-size: 2.5rem;
+    }
 
     &.x-win {
       color: var(--color-teal-500);
@@ -316,9 +327,12 @@ dialog {
 footer.attribution {
   margin-top: auto;
   text-align: center;
-  padding: 2rem;
+  padding: 2rem 0;
   font-size: 14px;
 
+  p {
+    text-wrap: pretty;
+  }
   a {
     color: var(--color-yellow-500);
     font-weight: 500;
